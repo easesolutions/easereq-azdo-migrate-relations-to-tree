@@ -51,7 +51,7 @@ settings:
 |---------|-------------|---------|
 | `application_url` | Base URL of your Azure DevOps instance | `https://dev.azure.com/` |
 | `azure_organization` | Organization name in Azure DevOps | `my-organization` |
-| `api_version` | Azure DevOps API version | `7.0` or `7.1` |
+| `api_version` | Azure DevOps API version | `7.1-preview.1` or `7.2`. Minimum required version is `7.1-preview.1` |
 | `azure_pat` | Personal Access Token for authentication | (see PAT generation below) |
 
 **For the correct Azure API Version:** https://learn.microsoft.com/en-us/rest/api/azure/devops/#api-and-tfs-version-mapping
