@@ -29,7 +29,10 @@ class ApiService:
 
     # Rado API configuration
     __rado_api_auth = BasicAuth(TEST_ENV.azure_auth_token, "")
-    _rado_api_url = f"https://extmgmt.{TEST_ENV.application_url.split('//')[-1]}"
+
+    is_cloud = "dev.azure.com" in TEST_ENV.application_url
+    url_prefix = "https://extmgmt." if is_cloud else "https://"
+    _rado_api_url = f"{url_prefix}{TEST_ENV.application_url.split('//')[-1]}"
     _rado_client = RadoApi(
         _rado_api_url,
         auth=__rado_api_auth,
