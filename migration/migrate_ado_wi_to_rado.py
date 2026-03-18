@@ -3,6 +3,7 @@
 from AzureApi.api_service import ApiService
 from collections import defaultdict
 from typing import List, Dict, Any
+import ast
 
 
 class Migration:
@@ -32,12 +33,14 @@ class Migration:
         tree_items = self._azure_api_service.get_all_tree_items(project_id) or []
 
         # Build set of existing tree item IDs for quick lookup
-        tree_item_ids = {str(item["id"]) for item in tree_items}
+        tree_item_ids = self.get_tree_items_id(tree_items)
+
+        tree_items = tree_items['value'] if "value" in tree_items else tree_items
 
         # If target exists in tree, remove its children to avoid conflicts
         if target_id in tree_item_ids:
             children_to_delete = self.window_by_children(tree_items, target_id)
-
+            wi_tuple_id = self.normalize_wi_ids(wi_tuple_id)
             self.check_if_workitem_to_add_exist_on_tree(
                 wi_tuple_id,
                 tree_item_ids,
@@ -170,7 +173,7 @@ class Migration:
         Raises:
             ValueError: If parent work item is not found before its children
         """
-        parent_id = None
+        parent_id = 1
         grouped_items = defaultdict(list)
 
         # Group items by their parent
@@ -187,3 +190,16 @@ class Migration:
 
         # Return children only (exclude parent element at index 0)
         return grouped_items[target_id][1:]
+
+    def normalize_wi_ids(self, value):
+        if isinstance(value, str):
+            value = ast.literal_eval(value)
+        if isinstance(value, (list, tuple)):
+            return tuple(map(int, value))
+        return (int(value),)
+
+    def get_tree_items_id(self,tree_items):
+        if "value" in tree_items and 'count' in tree_items:
+            return {str(item["id"]) for item in tree_items['value']}
+        else:
+            return {str(item["id"]) for item in tree_items}

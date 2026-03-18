@@ -24,43 +24,105 @@ Users are solely responsible for testing and validating the migration process in
 
 * One **Azure DevOps** instance with **easeRequirements** extension installed
 * A properly configured `config.yaml` file for the target instance
+* One **Environment Variable** with the name of configuration that will be use to migrate 
 * An **API Token** (Personal Access Token) with permissions to modify the requirements tree
 
-### Configuration File
+Here’s a cleaner, more professional, and easier-to-follow version of your README section, with improved structure, wording, and consistency. I’ve also polished the English and formatting while keeping all your original intent.
 
-Create a configuration file containing the information required to access your Azure DevOps environment.
+---
 
-* **Filename:** `config.yaml`
-* **Location:** Place in the project root directory
-* **Important:** Ensure the **easeRequirements** extension is already installed in your target Azure DevOps environment before running the migration
 
-#### Example `config.yaml`
+###  Configuration File
+
+To connect this project with your Azure DevOps environment, you must create a configuration file with the required credentials and settings.
+
+#### File Requirements
+
+- **Filename:** `config.yaml`  
+- **Location:** Root directory of the project  
+- **Prerequisite:** Ensure the **easeRequirements** extension is installed in your target Azure DevOps environment before running the migration.
+
+---
+
+###  Example `config.yaml`
 
 ```yaml
 settings:
-  env:
-    application_url: <Your AzDO URL (e.g.: https://dev.azure.com/)>
+  default:
+    application_url: <Your Azure DevOps URL (e.g. https://dev.azure.com/)>
     azure_organization: <Your organization name>
-    api_version: <Azure API Version (e.g.: 7.1-preview)>
+    api_version: <Azure API version (e.g. 7.1-preview.1)>
     azure_pat: <Your Personal Access Token>
+    extension_name: <Extension name (e.g. requirements)>
+    
+  development:
+    application_url: <Your secondary Azure DevOps URL>
+    azure_organization: <Your organization name>
+    api_version: <Azure API version for this environment>
+    azure_pat: <Your Personal Access Token>
+    extension_name: <Extension name (e.g. azure-requirements)>
+````
+
+---
+
+###  Configuration Details
+
+| Setting              | Description                                        | Example                    |
+| -------------------- | -------------------------------------------------- | -------------------------- |
+| `application_url`    | Base URL of your Azure DevOps instance             | `https://dev.azure.com/`   |
+| `azure_organization` | Azure DevOps organization name                     | `my-organization`          |
+| `api_version`        | Azure DevOps REST API version                      | `7.1-preview.1`, `7.2`     |
+| `azure_pat`          | Personal Access Token used for authentication      | *(see instructions below)* |
+| `extension_name`     | Name of the installed extension in the environment | `requirements`             |
+
+---
+
+###  Useful Resources
+
+* Azure DevOps API version reference:
+  [https://learn.microsoft.com/en-us/rest/api/azure/devops/#api-and-tfs-version-mapping](https://learn.microsoft.com/en-us/rest/api/azure/devops/#api-and-tfs-version-mapping)
+
+---
+
+###  Generating a Personal Access Token (PAT)
+
+1. Visit:
+   [https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate](https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate)
+
+2. Create a new token with the following scopes:
+
+   * **Work Items** → Read
+   * **Extension Data** → Read & Write
+
+---
+
+### Setting the Environment Variable
+
+The application uses an environment variable named `APP_ENV` to determine which configuration to load. If no environment variable is configured, the tool will use the default configuration.
+
+#### On Linux / macOS
+
+```bash
+export APP_ENV=production
 ```
 
-#### Configuration Details
+#### On Windows (Command Prompt)
 
-| Setting | Description | Example |
-|---------|-------------|---------|
-| `application_url` | Base URL of your Azure DevOps instance | `https://dev.azure.com/` |
-| `azure_organization` | Organization name in Azure DevOps | `my-organization` |
-| `api_version` | Azure DevOps API version | `7.1-preview.1` or `7.2`. Minimum required version is `7.1-preview.1` |
-| `azure_pat` | Personal Access Token for authentication | (see PAT generation below) |
+```cmd
+set APP_ENV=production
+```
 
-**For the correct Azure API Version:** https://learn.microsoft.com/en-us/rest/api/azure/devops/#api-and-tfs-version-mapping
+#### On Windows (PowerShell)
 
-**To generate a Personal Access Token:**
-1. Visit: https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate
-2. Required scopes:
-   * Work items - Read
-   * Extension Data - Read & Write
+```powershell
+$env:APP_ENV="production"
+```
+
+---
+
+### Example
+
+If `APP_ENV=development`, the application will load the `development` configuration block from `config.yaml`.
 
 ---
 
