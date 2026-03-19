@@ -27,8 +27,6 @@ Users are solely responsible for testing and validating the migration process in
 * One **Environment Variable** with the name of configuration that will be use to migrate 
 * An **API Token** (Personal Access Token) with permissions to modify the requirements tree
 
-Here’s a cleaner, more professional, and easier-to-follow version of your README section, with improved structure, wording, and consistency. I’ve also polished the English and formatting while keeping all your original intent.
-
 ---
 
 
