@@ -46,7 +46,7 @@ class AppSettings:
         Args:
             config_yml: Path object pointing to the config.yaml file
         """
-        # get the env variable that define in which env would be runned
+        # Get the environment variable that defines which environment the application will run in
         self.env = env or os.getenv("APP_ENV", "default")
         config = read_yml_file(config_yml)
         settings = config.get("settings", {})
