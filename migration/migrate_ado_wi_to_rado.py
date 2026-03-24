@@ -35,7 +35,7 @@ class Migration:
         # Build set of existing tree item IDs for quick lookup
         tree_item_ids = self.get_tree_items_id(tree_items)
 
-        tree_items = tree_items['value'] if "value" in tree_items else tree_items
+        tree_items = tree_items['value'] if "value" in tree_items and isinstance(tree_items,dict) else tree_items
 
         # If target exists in tree, remove its children to avoid conflicts
         if target_id in tree_item_ids:
@@ -173,7 +173,7 @@ class Migration:
         Raises:
             ValueError: If parent work item is not found before its children
         """
-        parent_id = 1
+        parent_id = None
         grouped_items = defaultdict(list)
 
         # Group items by their parent
@@ -192,11 +192,18 @@ class Migration:
         return grouped_items[target_id][1:]
 
     def normalize_wi_ids(self, value):
-        if isinstance(value, str):
-            value = ast.literal_eval(value)
-        if isinstance(value, (list, tuple)):
-            return tuple(map(int, value))
-        return (int(value),)
+        try:
+            if isinstance(value, str):
+                value = ast.literal_eval(value)
+
+            if isinstance(value, (list, tuple)):
+                return tuple(int(v) for v in value)
+
+            return (int(value),)
+
+        except (ValueError, SyntaxError, TypeError) as e:
+            raise ValueError(f"Invalid value for conversion: {value}") from e
+
 
     def get_tree_items_id(self,tree_items):
         if "value" in tree_items and 'count' in tree_items:

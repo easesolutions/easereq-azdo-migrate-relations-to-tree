@@ -59,7 +59,7 @@ settings:
     api_version: <Azure API version for this environment>
     azure_pat: <Your Personal Access Token>
     extension_name: <Extension name (e.g. azure-requirements)>
-````
+```
 
 ---
 
