@@ -46,7 +46,7 @@ To connect this project with your Azure DevOps environment, you must create a co
 
 ```yaml
 settings:
-  default:
+  env:
     application_url: <Your Azure DevOps URL (e.g. https://dev.azure.com/)>
     azure_organization: <Your organization name>
     api_version: <Azure API version (e.g. 7.1-preview.1)>
