@@ -24,7 +24,7 @@ Users are solely responsible for testing and validating the migration process in
 
 * One **Azure DevOps** instance with **easeRequirements** extension installed
 * A properly configured `config.yaml` file for the target instance
-* One **Environment Variable** with the name of configuration that will be use to migrate 
+* One **Environment Variable** with the name of configuration that will be used to migrate 
 * An **API Token** (Personal Access Token) with permissions to modify the requirements tree
 
 ---
